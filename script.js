@@ -60,7 +60,7 @@ async function cargarRanking() {
 
     });
 
-    document.getElementById("tablaRanking").innerHTML = tabla;
+    document.getElementById("Ranking").innerHTML = tabla;
 
 
   } catch (error) {
