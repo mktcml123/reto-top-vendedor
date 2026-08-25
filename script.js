@@ -1,58 +1,80 @@
 const URL_API = "https://script.google.com/macros/s/AKfycbwD7iJ_D9BtLSUh9xfv1QqSzrXx79qfs3Ncm5uH3zr8uZnsTB2vb0SHgzkbeqQ7oBgc/exec";
 
-async function cargarRanking(){
+async function cargarRanking() {
 
-    try{
+  try {
 
-        const respuesta = await fetch(URL_API);
-        const datos = await respuesta.json();
+    const respuesta = await fetch(URL_API);
+    const datos = await respuesta.json();
 
-        // PODIO
-        let podio = "";
+    // =========================
+    // PODIO
+    // =========================
 
-        datos.slice(0,3).forEach((persona,index)=>{
+    let podio = "";
 
-            const medallas = ["🥇","🥈","🥉"];
+    datos.slice(0, 3).forEach((persona, index) => {
 
-            podio += `
-                <div class="tarjeta">
-                    <h2>${medallas[index]}</h2>
-                    <h3>${persona.colaborador}</h3>
-                    <p>${persona.ventas}</p>
-                    <span>ventas</span>
-                </div>
-            `;
+      const medallas = ["🥇", "🥈", "🥉"];
 
-        });
+      podio += `
+        <div class="tarjeta">
 
-        document.getElementById("podio").innerHTML = podio;
+          <h2>${medallas[index]}</h2>
 
-        // TABLA
+          <h3>${persona.colaborador}</h3>
 
-        let tabla = "";
+          <p>${persona.ventas}</p>
 
-        datos.forEach(persona=>{
+          <span>ventas</span>
 
-            tabla += `
-                <tr>
-                    <td>${persona.posicion}</td>
-                    <td>${persona.colaborador}</td>
-                    <td>${persona.ventas}</td>
-                </tr>
-            `;
+        </div>
+      `;
 
-        });
+    });
 
-        document.getElementById("ranking").innerHTML = tabla;
+    document.getElementById("podio").innerHTML = podio;
 
-    }catch(error){
 
-        console.error(error);
+    // =========================
+    // TOP 10
+    // =========================
 
-    }
+    let tabla = "";
+
+    datos.slice(0, 10).forEach((persona, index) => {
+
+      tabla += `
+        <tr>
+
+          <td>${index + 1}</td>
+
+          <td>${persona.colaborador}</td>
+
+          <td>${persona.sucursal || "—"}</td>
+
+          <td>${persona.ventas}</td>
+
+        </tr>
+      `;
+
+    });
+
+    document.getElementById("tablaRanking").innerHTML = tabla;
+
+
+  } catch (error) {
+
+    console.error("Error al cargar ranking:", error);
+
+  }
 
 }
 
+
+// Cargar al abrir
 cargarRanking();
 
-setInterval(cargarRanking,60000);
+
+// Actualizar cada minuto
+setInterval(cargarRanking, 60000);
