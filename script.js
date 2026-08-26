@@ -2,72 +2,72 @@ const URL_API = "https://script.google.com/macros/s/AKfycbwD7iJ_D9BtLSUh9xfv1QqS
 
 async function cargarRanking() {
 
-  try {
+    try {
 
-    const respuesta = await fetch(URL_API);
-    const datos = await respuesta.json();
+        const respuesta = await fetch(URL_API + "?t=" + Date.now());
+        const datos = await respuesta.json();
 
-    // =========================
-    // PODIO
-    // =========================
+        // =========================
+        // PODIO - TOP 3
+        // =========================
 
-    let podio = "";
+        let podio = "";
 
-    datos.slice(0, 3).forEach((persona, index) => {
+        datos.slice(0, 3).forEach((persona, index) => {
 
-      const medallas = ["🥇", "🥈", "🥉"];
+            const medallas = ["🥇", "🥈", "🥉"];
 
-      podio += `
-        <div class="tarjeta">
+            podio += `
+                <div class="tarjeta">
 
-          <h2>${medallas[index]}</h2>
+                    <h2>${medallas[index]}</h2>
 
-          <h3>${persona.colaborador}</h3>
+                    <h3>${persona.colaborador}</h3>
 
-          <p>${persona.ventas}</p>
+                    <p>${persona.ventas}</p>
 
-          <span>ventas</span>
+                    <span>ventas</span>
 
-        </div>
-      `;
+                </div>
+            `;
 
-    });
+        });
 
-    document.getElementById("podio").innerHTML = podio;
-
-
-    // =========================
-    // TOP 10
-    // =========================
-
-    let tabla = "";
-
-    datos.slice(0, 10).forEach((persona, index) => {
-
-      tabla += `
-        <tr>
-
-          <td>${index + 1}</td>
-
-          <td>${persona.colaborador}</td>
-
-          <td>${persona.sucursal || "—"}</td>
-
-          <td>${persona.ventas}</td>
-
-        </tr>
-      `;
-
-    });
-
-    document.getElementById("Ranking").innerHTML = tabla;
+        document.getElementById("podio").innerHTML = podio;
 
 
-  } catch (error) {
+        // =========================
+        // TOP 10
+        // =========================
 
-    console.error("Error al cargar ranking:", error);
+        let tabla = "";
 
-  }
+        datos.slice(0, 10).forEach((persona, index) => {
+
+            tabla += `
+                <tr>
+
+                    <td>${index + 1}</td>
+
+                    <td>${persona.colaborador}</td>
+
+                    <td>${persona.sucursal || "-"}</td>
+
+                    <td>${persona.ventas}</td>
+
+                </tr>
+            `;
+
+        });
+
+        document.getElementById("ranking").innerHTML = tabla;
+
+
+    } catch (error) {
+
+        console.error("Error al cargar ranking:", error);
+
+    }
 
 }
 
